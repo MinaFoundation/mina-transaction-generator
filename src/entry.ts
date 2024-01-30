@@ -13,8 +13,6 @@ program
     .option('-c, --transaction-count <number>', 'number of transactions to send', '5')
     .option('-i, --transaction-interval <delay>', 'time delay in ms between transactions', '5000')
     .option('-t, --transaction-type <type>', 'transaction type (zkApp or regular)', 'regular')
-    .option('-p, --password-for-sender-private-key <password>', 'password for the key file')
-    .option('-k, --path-to-sender-private-key <path>', 'A path to a private key(stored on mina daemon host)')
     .action((options) => {
         const url = options.url || process.env.MINA_GRAPHQL_URL;
         const senderPrivateKey = options.senderPrivateKey || process.env.SENDER_PRIVATE_KEY;
@@ -36,28 +34,22 @@ program
             console.error("Path to a recepient wallet list is not specified.");
             process.exit(1);
         }
-        if (process.env.TRANSACTION_COUNT){
+        if (process.env.TRANSACTION_COUNT) {
             transactionCount = process.env.TRANSACTION_COUNT
         }
-        if (process.env.TRANSACTION_INTERVAL){
+        if (process.env.TRANSACTION_INTERVAL) {
             transactionInterval = process.env.TRANSACTION_INTERVAL
         }
-        if (process.env.TRANSACTION_TYPE){
+        if (process.env.TRANSACTION_TYPE) {
             transactionType = process.env.TRANSACTION_TYPE
         }
         let receivers = fs.readFileSync(walletList).toString().split("\n");
 
         if (transactionType == 'regular') {
-            if (passwordForSenderPrivateKey == undefined || pathToSenderPrivateKey == undefined) {
-                console.log('Please provide password and path for key file');
-                return;
-            }
 
             paymentGenerator(
                 url,
                 senderPrivateKey,
-                passwordForSenderPrivateKey,
-                pathToSenderPrivateKey,
                 receivers,
                 parseInt(transactionCount),
                 parseInt(transactionInterval))

@@ -1,49 +1,44 @@
-import { PrivateKey } from "o1js";
+import Client from 'mina-signer';
 
 export async function paymentGenerator(
     network: string,
     deployerAccount: string,
-    password: string,
-    path: string, receivers: string[],
+    receivers: string[],
     noTransactions: number,
     timeDelayMS: number
 ) {
-    const deployer_public_key = PrivateKey.fromBase58(deployerAccount).toPublicKey().toBase58().toString();
-    const query_import = `mutation MyMutation {
-        importAccount(password: "${password}", path: "${path}")
+    const client = new Client({ network: 'testnet' });
+    let sender_public = client.derivePublicKey(deployerAccount)
+    const query = `query MyQuery {
+        account(publicKey: "${sender_public}") {
+          inferredNonce
+        }
       }`
-    await fetch(network, {
+    let response = await fetch(network, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            query: query_import
+            query: query
         }),
     })
-        .then(r => r.json())
-        .then(data => console.log("data returned:", data))
-    const query_unlock = `mutation MyMutation {
-        unlockAccount(input: {publicKey: "${deployer_public_key}", password: "${password}"})
-      }`
-    await fetch(network, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            query: query_unlock
-        }),
-    })
-        .then(r => r.json())
-        .then(data => console.log("data returned:", data))
-
+    let inferred_nonce = parseInt((await response.json()).data.account.inferredNonce)
     for (let i = 0; i < noTransactions; i++) {
         const receiver = receivers[Math.floor(Math.random() * receivers.length)]
         console.log("receiver: ", receiver)
+        let signedPayment = client.signPayment(
+            {
+                to: receiver,
+                from: sender_public,
+                amount: 1500000,
+                fee: 2000000000,
+                nonce: inferred_nonce + i
+            },
+            deployerAccount
+        );
         const query_pay = `mutation MyMutation {
-            sendPayment(input: {fee: 2000000000, amount: "1500000", to: "${receiver}", from: "${deployer_public_key}", memo: "test"})
-          }`
+            sendPayment(input: {fee: 2000000000,  amount: "1500000", to: "${receiver}", from: "${sender_public}", nonce: "${inferred_nonce + i}"}, signature: {field: "${signedPayment.signature.field}", scalar: "${signedPayment.signature.scalar}"})}`
         await fetch(network, {
             method: "POST",
             headers: {

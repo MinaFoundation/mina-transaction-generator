@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "@types/node": "^20.11.2",
-    "commander": "^11.1.0"
+    "commander": "^11.1.0",
+    "mina-signer": "^2.1.2"
   }
 }
