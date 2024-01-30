@@ -42,7 +42,7 @@ export async function paymentGenerator(
         const receiver = receivers[Math.floor(Math.random() * receivers.length)]
         console.log("receiver: ", receiver)
         const query_pay = `mutation MyMutation {
-            sendPayment(input: {fee: 2000000000, amount: "1", to: "${receiver}", from: "${deployer_public_key}", memo: "test"})
+            sendPayment(input: {fee: 2000000000, amount: "1500000", to: "${receiver}", from: "${deployer_public_key}", memo: "test"})
           }`
         await fetch(network, {
             method: "POST",
