@@ -10,6 +10,21 @@ export async function paymentGenerator(
 ) {
     const client = new Client({ network: 'testnet' });
     let sender_public = client.derivePublicKey(deployerAccount)
+    const query = `query MyQuery {
+        account(publicKey: "${sender_public}") {
+          inferredNonce
+        }
+      }`
+    let response = await fetch(network, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            query: query
+        }),
+    })
+    let inferred_nonce = parseInt((await response.json()).data.account.inferredNonce)
     for (let i = 0; i < noTransactions; i++) {
         const receiver = receivers[Math.floor(Math.random() * receivers.length)]
         console.log("receiver: ", receiver)
@@ -19,12 +34,12 @@ export async function paymentGenerator(
                 from: sender_public,
                 amount: 1500000,
                 fee: 2000000000,
-                nonce: 0
+                nonce: inferred_nonce + i
             },
             deployerAccount
         );
         const query_pay = `mutation MyMutation {
-            sendPayment(input: {fee: 2000000000, amount: "1500000", to: "${receiver}", from: "${sender_public}"}, signature: {rawSignature: "${signedPayment.signature}"}) {
+            sendPayment(input: {fee: 2000000000, nonce: ${inferred_nonce + i},  amount: "1500000", to: "${receiver}", from: "${sender_public}"}, signature: {rawSignature: "${signedPayment.signature}"}) {
           }`
         await fetch(network, {
             method: "POST",
