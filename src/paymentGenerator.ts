@@ -1,4 +1,3 @@
-import { PrivateKey } from "o1js";
 import Client from 'mina-signer';
 
 export async function paymentGenerator(
@@ -39,8 +38,7 @@ export async function paymentGenerator(
             deployerAccount
         );
         const query_pay = `mutation MyMutation {
-            sendPayment(input: {fee: 2000000000, nonce: ${inferred_nonce + i},  amount: "1500000", to: "${receiver}", from: "${sender_public}"}, signature: {rawSignature: "${signedPayment.signature}"}) {
-          }`
+            sendPayment(input: {fee: 2000000000,  amount: "1500000", to: "${receiver}", from: "${sender_public}", nonce: "${inferred_nonce + i}"}, signature: {field: "${signedPayment.signature.field}", scalar: "${signedPayment.signature.scalar}"})}`
         await fetch(network, {
             method: "POST",
             headers: {
