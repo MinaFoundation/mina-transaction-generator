@@ -46,10 +46,6 @@ program
         let receivers = fs.readFileSync(walletList).toString().split("\n");
 
         if (transactionType == 'regular') {
-            if (passwordForSenderPrivateKey == undefined || pathToSenderPrivateKey == undefined) {
-                console.log('Please provide password and path for key file');
-                return;
-            }
 
             paymentGenerator(
                 url,
