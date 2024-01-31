@@ -1,9 +1,20 @@
-FROM node:alpine
+FROM node:alpine as build
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+COPY package*.json tsconfig.json ./
+COPY src ./src
 
-COPY ./build ./
+RUN npm install && npm run build
 
-CMD ["node", "./src/entry.js"]
+FROM node:alpine
+
+WORKDIR /app
+
+COPY --from=build /usr/src/app/build ./
+
+COPY --from=build /usr/src/app/package*.json ./
+
+RUN npm install
+
+CMD ["node", "./entry.js"]
