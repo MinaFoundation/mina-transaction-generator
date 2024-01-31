@@ -48,12 +48,6 @@ jobs:
           registry: ${{ env.ECR_REPOSITORY_URL}}
           repository: ${{ env.ECR_REPOSITORY_NAME }}
           tag: ${{ env.TAG }}
-      - name: 🏗️ Install Dependencies
-        run: |
-          npm install
-      - name: 📦 Compile Mina Transactions Generator
-        run: |
-          npm run build
       - name: 🛠️ Build Mina Transactions Generator Docker Image
         if: steps.checktag.outputs.tag == 'not found'
         run: DOCKER_BUILDKIT=1 docker build -t ${{ env.ECR_REPOSITORY_URL}}/${{ env.ECR_REPOSITORY_NAME }}:${{ env.TAG }} .
