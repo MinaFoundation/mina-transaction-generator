@@ -20,8 +20,6 @@ program
         let transactionCount = options.transactionCount;
         let transactionInterval = options.transactionInterval;
         let transactionType = options.transactionType;
-        const passwordForSenderPrivateKey = options.passwordForSenderPrivateKey || process.env.SENDER_PRIVATE_KEY_PASSWORD;
-        const pathToSenderPrivateKey = options.pathToSenderPrivateKey || process.env.SENDER_PRIVATE_KEY_PATH;
         if (!url) {
             console.error("url is not specified or MINA_GRAPHQL_URL is not set.");
             process.exit(1);
