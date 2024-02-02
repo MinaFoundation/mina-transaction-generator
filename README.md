@@ -51,9 +51,9 @@ Make sure you have `node` installed on your system. Git clone [mina-transactions
 - Mount a wallet list to a container.
 
 **Environmental variables**
-| Name                    | Description                                         | Value                           |
-| ----------------------- | --------------------------------------------------- | ------------------------------- |
-| `MINA_GRAPHQL_URL`      | A Mina node graphql endpoint so connect to          | `http://localhost:3085/graphql` |
+| Name                    | Description                                         | Value |
+| ----------------------- | --------------------------------------------------- | ----- |
+| `MINA_GRAPHQL_URL`      | A Mina node graphql endpoint so connect to          | `""` |
 | `SENDER_PRIVATE_KEY`    | Private key string of a sender.                     | `""` |
 | `RECEPIENT_WALLET_LIST` | A file with a list of receiver public keys.         | `""` |
 | `TRANSACTION_TYPE`      | A type of transaction: `regular` or `zkApp`.        | `regular` |
