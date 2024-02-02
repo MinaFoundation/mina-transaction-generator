@@ -44,14 +44,33 @@ Make sure you have `node` installed on your system. Git clone [mina-transactions
   ```
   > **Note:** see `--help` for `--transaction-type`, `--transaction-count`, `--transaction-interval`
 
-### Running it using docker
+### Running it with docker
 
-Make sure you have access to  AWS ECR repository: 673156464838.dkr.ecr.us-west-2.amazonaws.com/mina-transactions-generator
+- Make sure you have access to  AWS ECR repository: 673156464838.dkr.ecr.us-west-2.amazonaws.com/mina-transactions-generator
+- Set bellow documented env variables.
+- Mount a wallet list to a container.
 
-Following can be configured 
-- MINA_GRAPHQL_URL
-- SENDER_PRIVATE_KEY
-- RECEPIENT_WALLET_LIST
-- TRANSACTION_TYPE
-- TRANSACTION_COUNT
-- TRANSACTION_INTERVAL
+**Environmental variables**
+| Name                    | Description                                         | Value                           |
+| ----------------------- | --------------------------------------------------- | ------------------------------- |
+| `MINA_GRAPHQL_URL`      | A Mina node graphql endpoint so connect to          | `http://localhost:3085/graphql` |
+| `SENDER_PRIVATE_KEY`    | Private key string of a sender.                     | `""` |
+| `RECEPIENT_WALLET_LIST` | A file with a list of receiver public keys.         | `""` |
+| `TRANSACTION_TYPE`      | A type of transaction: `regular` or `zkApp`.        | `regular` |
+| `TRANSACTION_COUNT`     | How many transactions to send(`-1` for unlimited).  | `5` |
+| `TRANSACTION_INTERVAL`  | How often execute the transactions(in miliseconds). | `5000` |
+
+1. Create a `txt` file with a list of public keys or receiving accounts.
+  ```bash
+  echo "B62..." > walletList.txt
+  ```
+2. Launch docker mounting that list as well as pointing to it.
+  ```bash 
+  $ docker run -v ./walletList.txt:/app/walletList.txt -e MINA_GRAPHQL_URL='https://localhost:3085/graphql' -e SENDER_PRIVATE_KEY='EK...' -e RECEPIENT_WALLET_LIST='/app/walletList.txt' minan-transactions-generator:0.1.3
+  ```
+  
+### Running it with helm
+
+It only makes sence to run it as a helm chart if you want a process to continuously send transactions.
+Therefore `--transaction-count` is always set to `-1`.
+For instructions refer to [mina-transactions-generator](https://github.com/MinaFoundation/helm-charts/tree/main/mina-transactions-generator) helm chart.
