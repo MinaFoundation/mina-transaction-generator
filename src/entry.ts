@@ -13,6 +13,8 @@ program
     .option('-c, --transaction-count <number>', 'number of transactions to send', '5')
     .option('-i, --transaction-interval <delay>', 'time delay in ms between transactions', '5000')
     .option('-t, --transaction-type <type>', 'transaction type (zkApp or regular)', 'regular')
+    .option('-a, --transaction-amount <amount>', 'amount of Mina to send', '1500000')
+    .option('-f, --transaction-fee <fee>', 'transaction fee', '2000000000')
     .action((options) => {
         const url = options.url || process.env.MINA_GRAPHQL_URL;
         const senderPrivateKey = options.senderPrivateKey || process.env.SENDER_PRIVATE_KEY;
@@ -20,6 +22,8 @@ program
         let transactionCount = options.transactionCount;
         let transactionInterval = options.transactionInterval;
         let transactionType = options.transactionType;
+        let transactionAmount = options.transactionAmount;
+        let transactionFee = options.transactionFee;
         if (!url) {
             console.error("url is not specified or MINA_GRAPHQL_URL is not set.");
             process.exit(1);
@@ -50,7 +54,9 @@ program
                 senderPrivateKey,
                 receivers,
                 parseInt(transactionCount),
-                parseInt(transactionInterval))
+                parseInt(transactionInterval),
+                parseInt(transactionAmount),
+                parseInt(transactionFee))
                 ;
         }
         else if (transactionType == 'zkApp') {
@@ -59,7 +65,9 @@ program
                 senderPrivateKey,
                 receivers,
                 parseInt(transactionCount),
-                parseInt(transactionInterval))
+                parseInt(transactionInterval),
+                parseInt(transactionAmount),
+                parseInt(transactionFee))
         }
         else {
             console.log('Invalid transaction type');

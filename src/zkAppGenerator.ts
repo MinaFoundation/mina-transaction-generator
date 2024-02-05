@@ -11,17 +11,19 @@ export async function zkAppGenerator(
     deployerAccount: string,
     receivers: string[],
     noTransactions: number,
-    timeDelayMS: number
+    timeDelayMS: number,
+    amount: number,
+    fee: number
 ) {
     if (noTransactions === -1) {
         while (true) {
             const receiver = receivers[Math.floor(Math.random() * receivers.length)];
-            await processZKTransaction(network, deployerAccount, receiver, timeDelayMS);
+            await processZKTransaction(network, deployerAccount, receiver, timeDelayMS, amount, fee);
         }
     } else {
         for (let i = 0; i < noTransactions; i++) {
             const receiver = receivers[Math.floor(Math.random() * receivers.length)];
-            await processZKTransaction(network, deployerAccount, receiver, timeDelayMS);
+            await processZKTransaction(network, deployerAccount, receiver, timeDelayMS, amount, fee);
         }
     }
 }
@@ -30,7 +32,9 @@ async function processZKTransaction(
     network: string,
     deployerAccount: string,
     receiver: string,
-    timeDelayMS: number
+    timeDelayMS: number,
+    amount: number,
+    fee: number
 ) {
     const devNet = Mina.Network(
         network
@@ -59,14 +63,10 @@ async function processZKTransaction(
     const toUserPublicKey = PublicKey.fromBase58(receiver);
     console.log('Receiver public key:', toUserPublicKey.toBase58().toString());
 
-    const MINA = 1e9;
-    const amount = 1 * MINA;
-
     let memo = 'Test ZKApp to Receiver';
-    const transactionFee = 2 * MINA;
 
     console.log('amount:', amount);
-    const tx = await Mina.transaction({ sender: deployerPubKey, fee: transactionFee, memo: memo, nonce: inferred_nonce }, () => {
+    const tx = await Mina.transaction({ sender: deployerPubKey, fee: fee, memo: memo, nonce: inferred_nonce }, () => {
         let accountUpdate;
         accountUpdate = AccountUpdate.createSigned(deployerPubKey);
         accountUpdate.send({ to: toUserPublicKey, amount: UInt64.from(amount) });

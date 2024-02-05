@@ -5,17 +5,19 @@ export async function paymentGenerator(
     deployerAccount: string,
     receivers: string[],
     noTransactions: number,
-    timeDelayMS: number
+    timeDelayMS: number,
+    amount: number,
+    fee: number
 ) {
     if (noTransactions === -1) {
         while (true) {
             const receiver = receivers[Math.floor(Math.random() * receivers.length)];
-            await processTransaction(network, deployerAccount, receiver, timeDelayMS);
+            await processTransaction(network, deployerAccount, receiver, timeDelayMS, amount, fee);
         }
     } else {
         for (let i = 0; i < noTransactions; i++) {
             const receiver = receivers[Math.floor(Math.random() * receivers.length)];
-            await processTransaction(network, deployerAccount, receiver, timeDelayMS);
+            await processTransaction(network, deployerAccount, receiver, timeDelayMS, amount, fee);
         }
     }
 }
@@ -23,7 +25,9 @@ async function processTransaction(
     network: string,
     deployerAccount: string,
     receiver: string,
-    timeDelayMS: number
+    timeDelayMS: number,
+    amount: number,
+    fee: number
 ) {
     const client = new Client({ network: 'testnet' });
     let sender_public = client.derivePublicKey(deployerAccount)
@@ -47,14 +51,14 @@ async function processTransaction(
         {
             to: receiver,
             from: sender_public,
-            amount: 1500000,
-            fee: 2000000000,
+            amount: amount,
+            fee: fee,
             nonce: inferred_nonce
         },
         deployerAccount
     );
     const query_pay = `mutation MyMutation {
-        sendPayment(input: {fee: 2000000000,  amount: "1500000", to: "${receiver}", from: "${sender_public}", nonce: "${inferred_nonce}"}, signature: {field: "${signedPayment.signature.field}", scalar: "${signedPayment.signature.scalar}"})}`;
+        sendPayment(input: {fee: "${fee}",  amount: "${amount}", to: "${receiver}", from: "${sender_public}", nonce: "${inferred_nonce}"}, signature: {field: "${signedPayment.signature.field}", scalar: "${signedPayment.signature.scalar}"})}`;
     await fetch(network, {
         method: "POST",
         headers: {
