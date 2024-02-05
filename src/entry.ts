@@ -1,8 +1,7 @@
 import { Command } from 'commander';
 import * as fs from 'fs';
-import { paymentGenerator } from './paymentGenerator.js';
-import { zkAppGenerator } from './zkAppGenerator.js';
 import { argv } from 'process';
+import { apply } from './combined.js';
 
 const program = new Command();
 program
@@ -46,32 +45,41 @@ program
             transactionType = process.env.TRANSACTION_TYPE
         }
         let receivers = fs.readFileSync(walletList).toString().split("\n");
-
-        if (transactionType == 'regular') {
-
-            paymentGenerator(
-                url,
-                senderPrivateKey,
-                receivers,
-                parseInt(transactionCount),
-                parseInt(transactionInterval),
-                parseInt(transactionAmount),
-                parseInt(transactionFee))
-                ;
-        }
-        else if (transactionType == 'zkApp') {
-            zkAppGenerator(
-                url,
-                senderPrivateKey,
-                receivers,
-                parseInt(transactionCount),
-                parseInt(transactionInterval),
-                parseInt(transactionAmount),
-                parseInt(transactionFee))
+        let transactionTypes = ['regular', 'zkApp', 'mixed']
+        if (transactionTypes.includes(transactionType)) {
+            if (transactionCount === -1) {
+                while (true) {
+                    let incr = 0;
+                    const receiver = receivers[Math.floor(Math.random() * receivers.length)];
+                    apply(url,
+                        senderPrivateKey,
+                        receiver,
+                        transactionInterval,
+                        transactionAmount,
+                        transactionFee,
+                        transactionType,
+                        incr);
+                    incr++;
+                }
+            }
+            else {
+                for (let i = 0; i < transactionCount; i++) {
+                    const receiver = receivers[Math.floor(Math.random() * receivers.length)];
+                    apply(url,
+                        senderPrivateKey,
+                        receiver,
+                        transactionInterval,
+                        transactionAmount,
+                        transactionFee,
+                        transactionType,
+                        i);
+                }
+            }
         }
         else {
             console.log('Invalid transaction type');
             return;
         }
-    })
+    }
+    )
     .parse(argv);

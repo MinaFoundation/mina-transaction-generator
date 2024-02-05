@@ -1,27 +1,6 @@
 import Client from 'mina-signer';
 
-export async function paymentGenerator(
-    network: string,
-    deployerAccount: string,
-    receivers: string[],
-    noTransactions: number,
-    timeDelayMS: number,
-    amount: number,
-    fee: number
-) {
-    if (noTransactions === -1) {
-        while (true) {
-            const receiver = receivers[Math.floor(Math.random() * receivers.length)];
-            await processTransaction(network, deployerAccount, receiver, timeDelayMS, amount, fee);
-        }
-    } else {
-        for (let i = 0; i < noTransactions; i++) {
-            const receiver = receivers[Math.floor(Math.random() * receivers.length)];
-            await processTransaction(network, deployerAccount, receiver, timeDelayMS, amount, fee);
-        }
-    }
-}
-async function processTransaction(
+export async function processTransaction(
     network: string,
     deployerAccount: string,
     receiver: string,

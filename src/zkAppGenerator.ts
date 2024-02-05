@@ -6,29 +6,7 @@ import {
     PublicKey,
 } from 'o1js';
 
-export async function zkAppGenerator(
-    network: string,
-    deployerAccount: string,
-    receivers: string[],
-    noTransactions: number,
-    timeDelayMS: number,
-    amount: number,
-    fee: number
-) {
-    if (noTransactions === -1) {
-        while (true) {
-            const receiver = receivers[Math.floor(Math.random() * receivers.length)];
-            await processZKTransaction(network, deployerAccount, receiver, timeDelayMS, amount, fee);
-        }
-    } else {
-        for (let i = 0; i < noTransactions; i++) {
-            const receiver = receivers[Math.floor(Math.random() * receivers.length)];
-            await processZKTransaction(network, deployerAccount, receiver, timeDelayMS, amount, fee);
-        }
-    }
-}
-
-async function processZKTransaction(
+export async function processZKTransaction(
     network: string,
     deployerAccount: string,
     receiver: string,
