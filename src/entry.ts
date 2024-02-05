@@ -14,7 +14,7 @@ program
     .option('-t, --transaction-type <type>', 'transaction type (zkApp or regular)', 'regular')
     .option('-a, --transaction-amount <amount>', 'amount of Mina to send', '1500000')
     .option('-f, --transaction-fee <fee>', 'transaction fee', '2000000000')
-    .action((options) => {
+    .action(async (options) => {
         const url = options.url || process.env.MINA_GRAPHQL_URL;
         const senderPrivateKey = options.senderPrivateKey || process.env.SENDER_PRIVATE_KEY;
         const walletList = options.walletList || process.env.RECEPIENT_WALLET_LIST;
@@ -51,7 +51,7 @@ program
                 while (true) {
                     let incr = 0;
                     const receiver = receivers[Math.floor(Math.random() * receivers.length)];
-                    applyGenerator(url,
+                    await applyGenerator(url,
                         senderPrivateKey,
                         receiver,
                         transactionInterval,
@@ -65,7 +65,7 @@ program
             else {
                 for (let i = 0; i < transactionCount; i++) {
                     const receiver = receivers[Math.floor(Math.random() * receivers.length)];
-                    applyGenerator(url,
+                    await applyGenerator(url,
                         senderPrivateKey,
                         receiver,
                         transactionInterval,

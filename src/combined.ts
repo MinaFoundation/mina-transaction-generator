@@ -11,7 +11,7 @@ export async function applyGenerator(
     transactionType: string,
     i: number) {
     if (transactionType === 'regular') {
-        processTransaction(
+        await processTransaction(
             url,
             senderPrivateKey,
             receiver,
@@ -21,7 +21,7 @@ export async function applyGenerator(
         );
     }
     else if (transactionType === 'zkApp') {
-        processZKTransaction(
+        await processZKTransaction(
             url,
             senderPrivateKey,
             receiver,
@@ -31,7 +31,7 @@ export async function applyGenerator(
     }
     else {
         if (i % 2 === 0) {
-            processTransaction(
+            await processTransaction(
                 url,
                 senderPrivateKey,
                 receiver,
@@ -41,7 +41,7 @@ export async function applyGenerator(
             );
         }
         else {
-            processZKTransaction(
+            await processZKTransaction(
                 url,
                 senderPrivateKey,
                 receiver,
