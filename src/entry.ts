@@ -1,7 +1,7 @@
 import { Command } from 'commander';
 import * as fs from 'fs';
 import { argv } from 'process';
-import { apply } from './combined.js';
+import { applyGenerator } from './combined.js';
 
 const program = new Command();
 program
@@ -51,7 +51,7 @@ program
                 while (true) {
                     let incr = 0;
                     const receiver = receivers[Math.floor(Math.random() * receivers.length)];
-                    apply(url,
+                    applyGenerator(url,
                         senderPrivateKey,
                         receiver,
                         transactionInterval,
@@ -65,7 +65,7 @@ program
             else {
                 for (let i = 0; i < transactionCount; i++) {
                     const receiver = receivers[Math.floor(Math.random() * receivers.length)];
-                    apply(url,
+                    applyGenerator(url,
                         senderPrivateKey,
                         receiver,
                         transactionInterval,

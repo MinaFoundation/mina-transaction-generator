@@ -1,7 +1,7 @@
 import { processTransaction } from './paymentGenerator.js';
 import { processZKTransaction } from './zkAppGenerator.js';
 
-export async function apply(
+export async function applyGenerator(
     url: string,
     senderPrivateKey: string,
     receiver: string,
