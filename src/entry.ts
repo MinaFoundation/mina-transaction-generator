@@ -47,33 +47,18 @@ program
         let receivers = fs.readFileSync(walletList).toString().split("\n");
         let transactionTypes = ['regular', 'zkApp', 'mixed']
         if (transactionTypes.includes(transactionType)) {
-            if (transactionCount === -1) {
-                while (true) {
-                    let incr = 0;
-                    const receiver = receivers[Math.floor(Math.random() * receivers.length)];
-                    await applyGenerator(url,
-                        senderPrivateKey,
-                        receiver,
-                        transactionInterval,
-                        transactionAmount,
-                        transactionFee,
-                        transactionType,
-                        incr);
-                    incr++;
-                }
-            }
-            else {
-                for (let i = 0; i < transactionCount; i++) {
-                    const receiver = receivers[Math.floor(Math.random() * receivers.length)];
-                    await applyGenerator(url,
-                        senderPrivateKey,
-                        receiver,
-                        transactionInterval,
-                        transactionAmount,
-                        transactionFee,
-                        transactionType,
-                        i);
-                }
+            let incr = 0;
+            while (incr != transactionCount) {
+                const receiver = receivers[Math.floor(Math.random() * receivers.length)];
+                await applyGenerator(url,
+                    senderPrivateKey,
+                    receiver,
+                    transactionInterval,
+                    transactionAmount,
+                    transactionFee,
+                    transactionType,
+                    incr);
+                incr++
             }
         }
         else {
