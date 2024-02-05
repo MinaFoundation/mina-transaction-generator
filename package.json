@@ -39,7 +39,7 @@
     "typescript": "^4.7.2"
   },
   "peerDependencies": {
-    "o1js": "^0.16.0"
+    "o1js": "latest"
   },
   "dependencies": {
     "@types/node": "^20.11.2",
