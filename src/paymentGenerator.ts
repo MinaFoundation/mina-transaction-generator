@@ -11,6 +11,8 @@ export async function processTransaction(
     const client = new Client({ network: 'testnet' });
     let sender_public = client.derivePublicKey(deployerAccount)
     console.log("receiver: ", receiver);
+    let amountToSend = amount * 1000000000;
+    let feeToSend = fee * 1000000000;
     const query = `query MyQuery {
         account(publicKey: "${sender_public}") {
           inferredNonce
@@ -30,14 +32,14 @@ export async function processTransaction(
         {
             to: receiver,
             from: sender_public,
-            amount: amount,
-            fee: fee,
+            amount: amountToSend,
+            fee: feeToSend,
             nonce: inferred_nonce
         },
         deployerAccount
     );
     const query_pay = `mutation MyMutation {
-        sendPayment(input: {fee: "${fee}",  amount: "${amount}", to: "${receiver}", from: "${sender_public}", nonce: "${inferred_nonce}"}, signature: {field: "${signedPayment.signature.field}", scalar: "${signedPayment.signature.scalar}"})}`;
+        sendPayment(input: {fee: "${feeToSend}",  amount: "${amountToSend}", to: "${receiver}", from: "${sender_public}", nonce: "${inferred_nonce}"}, signature: {field: "${signedPayment.signature.field}", scalar: "${signedPayment.signature.scalar}"})}`;
     await fetch(network, {
         method: "POST",
         headers: {

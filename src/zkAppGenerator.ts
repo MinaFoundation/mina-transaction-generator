@@ -19,6 +19,8 @@ export async function processZKTransaction(
     );
     Mina.setActiveInstance(devNet);
 
+    let amountToSend = amount * 1000000000;
+    let feeToSend = fee * 1000000000;
     const deployerPrivKey = PrivateKey.fromBase58(deployerAccount);
     const deployerPubKey = deployerPrivKey.toPublicKey();
     console.log('Sender public key:', deployerPubKey.toBase58().toString());
@@ -44,10 +46,10 @@ export async function processZKTransaction(
     let memo = 'Test ZKApp to Receiver';
 
     console.log('amount:', amount);
-    const tx = await Mina.transaction({ sender: deployerPubKey, fee: fee, memo: memo, nonce: inferred_nonce }, () => {
+    const tx = await Mina.transaction({ sender: deployerPubKey, fee: feeToSend, memo: memo, nonce: inferred_nonce }, () => {
         let accountUpdate;
         accountUpdate = AccountUpdate.createSigned(deployerPubKey);
-        accountUpdate.send({ to: toUserPublicKey, amount: UInt64.from(amount) });
+        accountUpdate.send({ to: toUserPublicKey, amount: UInt64.from(amountToSend) });
     });
     await tx.prove();
     console.log('tx.toPretty() : ' + JSON.stringify(tx.toPretty()));

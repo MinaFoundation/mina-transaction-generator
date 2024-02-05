@@ -16,8 +16,8 @@ export async function applyGenerator(
             senderPrivateKey,
             receiver,
             parseInt(transactionInterval),
-            parseInt(transactionAmount),
-            parseInt(transactionFee)
+            parseFloat(transactionAmount),
+            parseFloat(transactionFee)
         );
     }
     else if (transactionType === 'zkApp') {
@@ -26,8 +26,8 @@ export async function applyGenerator(
             senderPrivateKey,
             receiver,
             parseInt(transactionInterval),
-            parseInt(transactionAmount),
-            parseInt(transactionFee))
+            parseFloat(transactionAmount),
+            parseFloat(transactionFee))
     }
     else {
         if (i % 2 === 0) {
@@ -36,8 +36,8 @@ export async function applyGenerator(
                 senderPrivateKey,
                 receiver,
                 parseInt(transactionInterval),
-                parseInt(transactionAmount),
-                parseInt(transactionFee)
+                parseFloat(transactionAmount),
+                parseFloat(transactionFee)
             );
         }
         else {
@@ -46,8 +46,8 @@ export async function applyGenerator(
                 senderPrivateKey,
                 receiver,
                 parseInt(transactionInterval),
-                parseInt(transactionAmount),
-                parseInt(transactionFee)
+                parseFloat(transactionAmount),
+                parseFloat(transactionFee)
             );
         }
     }

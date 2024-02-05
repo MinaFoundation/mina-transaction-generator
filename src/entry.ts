@@ -12,8 +12,8 @@ program
     .option('-c, --transaction-count <number>', 'number of transactions to send', '5')
     .option('-i, --transaction-interval <delay>', 'time delay in ms between transactions', '5000')
     .option('-t, --transaction-type <type>', 'transaction type (zkApp or regular)', 'regular')
-    .option('-a, --transaction-amount <amount>', 'amount of Mina to send', '1500000')
-    .option('-f, --transaction-fee <fee>', 'transaction fee', '2000000000')
+    .option('-a, --transaction-amount <amount>', 'amount of Mina to send', '2')
+    .option('-f, --transaction-fee <fee>', 'transaction fee', '0.1')
     .action(async (options) => {
         const url = options.url || process.env.MINA_GRAPHQL_URL;
         const senderPrivateKey = options.senderPrivateKey || process.env.SENDER_PRIVATE_KEY;
