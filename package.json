@@ -27,6 +27,7 @@
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-typescript": "^7.16.0",
     "@types/jest": "^27.0.3",
+    "@types/node": "^20.11.16",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
     "eslint": "^8.7.0",
@@ -39,10 +40,9 @@
     "typescript": "^4.7.2"
   },
   "peerDependencies": {
-    "o1js": "^0.16.0"
+    "o1js": "latest"
   },
   "dependencies": {
-    "@types/node": "^20.11.2",
     "commander": "^11.1.0",
     "mina-signer": "^2.1.2"
   }

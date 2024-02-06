@@ -8,5 +8,7 @@
   --password-for-sender-private-key='' \
   --transaction-count=100 \
   --transaction-interval=5000 \
+  --transaction-fee=0.0001 \
+  --transaction-amount=0.0001 \
 
 # Use rampup-8 branch.

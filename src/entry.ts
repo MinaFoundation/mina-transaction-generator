@@ -1,8 +1,7 @@
 import { Command } from 'commander';
 import * as fs from 'fs';
-import { paymentGenerator } from './paymentGenerator.js';
-import { zkAppGenerator } from './zkAppGenerator.js';
 import { argv } from 'process';
+import { applyGenerator } from './combined.js';
 
 const program = new Command();
 program
@@ -13,13 +12,17 @@ program
     .option('-c, --transaction-count <number>', 'number of transactions to send', '5')
     .option('-i, --transaction-interval <delay>', 'time delay in ms between transactions', '5000')
     .option('-t, --transaction-type <type>', 'transaction type (zkApp or regular)', 'regular')
-    .action((options) => {
+    .option('-a, --transaction-amount <amount>', 'amount of Mina to send', '2')
+    .option('-f, --transaction-fee <fee>', 'transaction fee', '0.1')
+    .action(async (options) => {
         const url = options.url || process.env.MINA_GRAPHQL_URL;
         const senderPrivateKey = options.senderPrivateKey || process.env.SENDER_PRIVATE_KEY;
         const walletList = options.walletList || process.env.RECEPIENT_WALLET_LIST;
         let transactionCount = options.transactionCount;
         let transactionInterval = options.transactionInterval;
         let transactionType = options.transactionType;
+        let transactionAmount = options.transactionAmount;
+        let transactionFee = options.transactionFee;
         if (!url) {
             console.error("url is not specified or MINA_GRAPHQL_URL is not set.");
             process.exit(1);
@@ -42,28 +45,26 @@ program
             transactionType = process.env.TRANSACTION_TYPE
         }
         let receivers = fs.readFileSync(walletList).toString().split("\n");
-
-        if (transactionType == 'regular') {
-
-            paymentGenerator(
-                url,
-                senderPrivateKey,
-                receivers,
-                parseInt(transactionCount),
-                parseInt(transactionInterval))
-                ;
-        }
-        else if (transactionType == 'zkApp') {
-            zkAppGenerator(
-                url,
-                senderPrivateKey,
-                receivers,
-                parseInt(transactionCount),
-                parseInt(transactionInterval))
+        let transactionTypes = ['regular', 'zkApp', 'mixed']
+        if (transactionTypes.includes(transactionType)) {
+            let incr = 0;
+            while (incr != transactionCount) {
+                const receiver = receivers[Math.floor(Math.random() * receivers.length)];
+                await applyGenerator(url,
+                    senderPrivateKey,
+                    receiver,
+                    transactionInterval,
+                    transactionAmount,
+                    transactionFee,
+                    transactionType,
+                    incr);
+                incr++
+            }
         }
         else {
             console.log('Invalid transaction type');
             return;
         }
-    })
+    }
+    )
     .parse(argv);
