@@ -59,6 +59,8 @@ Make sure you have `node` installed on your system. Git clone [mina-transactions
 | `TRANSACTION_TYPE`      | A type of transaction: `regular` or `zkApp`.        | `regular` |
 | `TRANSACTION_COUNT`     | How many transactions to send(`-1` for unlimited).  | `5` |
 | `TRANSACTION_INTERVAL`  | How often execute the transactions(in miliseconds). | `5000` |
+| `TRANSACTION_AMOUNT`    | Amount(per transaction) to send.                    | `2` |
+| `TRANSACTION_FEE`       | Transaction fee.                                    | `0.1` |
 
 1. Create a `txt` file with a list of public keys or receiving accounts.
   ```bash
