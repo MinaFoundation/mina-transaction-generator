@@ -44,6 +44,12 @@ program
         if (process.env.TRANSACTION_TYPE) {
             transactionType = process.env.TRANSACTION_TYPE
         }
+        if (process.env.TRANSACTION_AMOUNT) {
+            transactionAmount = process.env.TRANSACTION_AMOUNT
+        }
+        if (process.env.TRANSACTION_FEE) {
+            transactionFee = process.env.TRANSACTION_FEE
+        }
         let receivers = fs.readFileSync(walletList).toString().split("\n");
         let transactionTypes = ['regular', 'zkApp', 'mixed']
         if (transactionTypes.includes(transactionType)) {
