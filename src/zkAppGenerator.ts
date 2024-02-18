@@ -14,9 +14,10 @@ export async function processZKTransaction(
     amount: number,
     fee: number
 ) {
-    const devNet = Mina.Network(
-        network
-    );
+    const devNet = Mina.Network({
+        networkId: "mainnet",
+        mina: network
+    });
     Mina.setActiveInstance(devNet);
 
     let amountToSend = amount * 1000000000;
