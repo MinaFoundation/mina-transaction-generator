@@ -46,7 +46,7 @@ export async function processZKTransaction(
     let memo = 'Test ZKApp to Receiver';
 
     console.log('amount:', amount);
-    const tx = await Mina.transaction({ sender: deployerPubKey, fee: feeToSend, memo: memo, nonce: inferred_nonce }, () => {
+    const tx = await Mina.transaction({ sender: deployerPubKey, fee: feeToSend, memo: memo, nonce: inferred_nonce }, async () => {
         let accountUpdate;
         accountUpdate = AccountUpdate.createSigned(deployerPubKey);
         accountUpdate.send({ to: toUserPublicKey, amount: UInt64.from(amountToSend) });
@@ -57,7 +57,7 @@ export async function processZKTransaction(
     const res = await tx.sign([deployerPrivKey]).send();
 
     console.log('res : ' + JSON.stringify(res));
-    const hash = await res.hash();
+    const hash = await res.hash;
 
     if (hash == null) {
         console.log('error sending transaction (see above)');
