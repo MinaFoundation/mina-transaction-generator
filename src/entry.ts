@@ -14,6 +14,7 @@ program
     .option('-t, --transaction-type <type>', 'transaction type (zkApp or regular)', 'regular')
     .option('-a, --transaction-amount <amount>', 'amount of Mina to send', '2')
     .option('-f, --transaction-fee <fee>', 'transaction fee', '0.1')
+    .option('-n, --network-profile', 'use network profile', 'testnet')
     .action(async (options) => {
         const url = options.url || process.env.MINA_GRAPHQL_URL;
         const senderPrivateKey = options.senderPrivateKey || process.env.SENDER_PRIVATE_KEY;
@@ -23,6 +24,7 @@ program
         let transactionType = options.transactionType;
         let transactionAmount = options.transactionAmount;
         let transactionFee = options.transactionFee;
+        let networkProfile = options.networkProfile;
         if (!url) {
             console.error("url is not specified or MINA_GRAPHQL_URL is not set.");
             process.exit(1);
@@ -50,6 +52,14 @@ program
         if (process.env.TRANSACTION_FEE) {
             transactionFee = process.env.TRANSACTION_FEE
         }
+        if (process.env.NETWORK_PROFILE) {
+            transactionInterval = process.env.TRANSACTION_INTERVAL
+        }
+        let networkProfileTypes = ['testnet', 'mainnet'];
+        if (!networkProfileTypes.includes(networkProfile)) {
+            console.log('Invalid network profile');
+            return;
+        }
         let receivers = fs.readFileSync(walletList).toString().split("\n");
         let transactionTypes = ['regular', 'zkApp', 'mixed']
         if (transactionTypes.includes(transactionType)) {
@@ -63,6 +73,7 @@ program
                     transactionAmount,
                     transactionFee,
                     transactionType,
+                    networkProfile,
                     incr);
                 incr++
             }
