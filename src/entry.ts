@@ -53,7 +53,7 @@ program
             transactionFee = process.env.TRANSACTION_FEE
         }
         if (process.env.NETWORK_PROFILE) {
-            transactionInterval = process.env.TRANSACTION_INTERVAL
+            networkProfile = process.env.NETWORK_PROFILE
         }
         let networkProfileTypes = ['testnet', 'mainnet'];
         if (!networkProfileTypes.includes(networkProfile)) {
