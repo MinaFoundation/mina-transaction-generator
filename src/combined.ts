@@ -9,6 +9,7 @@ export async function applyGenerator(
     transactionAmount: string,
     transactionFee: string,
     transactionType: string,
+    networkProfile: 'mainnet' | 'testnet',
     i: number) {
     if (transactionType === 'regular') {
         await processTransaction(
@@ -17,7 +18,8 @@ export async function applyGenerator(
             receiver,
             parseInt(transactionInterval),
             parseFloat(transactionAmount),
-            parseFloat(transactionFee)
+            parseFloat(transactionFee),
+            networkProfile
         );
     }
     else if (transactionType === 'zkApp') {
@@ -27,7 +29,8 @@ export async function applyGenerator(
             receiver,
             parseInt(transactionInterval),
             parseFloat(transactionAmount),
-            parseFloat(transactionFee))
+            parseFloat(transactionFee),
+            networkProfile);
     }
     else {
         if (i % 2 === 0) {
@@ -37,8 +40,9 @@ export async function applyGenerator(
                 receiver,
                 parseInt(transactionInterval),
                 parseFloat(transactionAmount),
-                parseFloat(transactionFee)
-            );
+                parseFloat(transactionFee),
+                networkProfile
+            )
         }
         else {
             await processZKTransaction(
@@ -47,7 +51,8 @@ export async function applyGenerator(
                 receiver,
                 parseInt(transactionInterval),
                 parseFloat(transactionAmount),
-                parseFloat(transactionFee)
+                parseFloat(transactionFee),
+                networkProfile
             );
         }
     }

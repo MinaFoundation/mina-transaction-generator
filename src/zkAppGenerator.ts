@@ -12,11 +12,13 @@ export async function processZKTransaction(
     receiver: string,
     timeDelayMS: number,
     amount: number,
-    fee: number
+    fee: number,
+    networkProfile: 'mainnet' | 'testnet'
 ) {
-    const devNet = Mina.Network(
-        network
-    );
+    const devNet = Mina.Network({
+        mina: network,
+        networkId: networkProfile
+    });
     Mina.setActiveInstance(devNet);
 
     let amountToSend = amount * 1000000000;

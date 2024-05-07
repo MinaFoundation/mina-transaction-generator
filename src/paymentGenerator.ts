@@ -6,9 +6,10 @@ export async function processTransaction(
     receiver: string,
     timeDelayMS: number,
     amount: number,
-    fee: number
+    fee: number,
+    networkProfile: 'mainnet' | 'testnet'
 ) {
-    const client = new Client({ network: 'testnet' });
+    const client = new Client({ network: networkProfile });
     let sender_public = client.derivePublicKey(deployerAccount)
     console.log("receiver: ", receiver);
     let amountToSend = amount * 1000000000;
