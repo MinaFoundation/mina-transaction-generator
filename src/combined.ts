@@ -29,7 +29,8 @@ export async function applyGenerator(
             receiver,
             parseInt(transactionInterval),
             parseFloat(transactionAmount),
-            parseFloat(transactionFee));
+            parseFloat(transactionFee),
+            networkProfile);
     }
     else {
         if (i % 2 === 0) {
@@ -50,7 +51,8 @@ export async function applyGenerator(
                 receiver,
                 parseInt(transactionInterval),
                 parseFloat(transactionAmount),
-                parseFloat(transactionFee)
+                parseFloat(transactionFee),
+                networkProfile
             );
         }
     }

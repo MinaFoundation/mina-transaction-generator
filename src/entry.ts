@@ -14,7 +14,7 @@ program
     .option('-t, --transaction-type <type>', 'transaction type (zkApp or regular)', 'regular')
     .option('-a, --transaction-amount <amount>', 'amount of Mina to send', '2')
     .option('-f, --transaction-fee <fee>', 'transaction fee', '0.1')
-    .option('-n, --network-profile', 'use network profile', 'testnet')
+    .option('-n, --network-profile <profile>', 'use network profile', 'testnet')
     .action(async (options) => {
         const url = options.url || process.env.MINA_GRAPHQL_URL;
         const senderPrivateKey = options.senderPrivateKey || process.env.SENDER_PRIVATE_KEY;
